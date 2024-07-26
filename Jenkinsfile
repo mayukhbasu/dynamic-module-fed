@@ -5,7 +5,7 @@ pipeline {
     stage('Checkout') {
       steps {
         // Checkout code from GitHub repository
-        git 'https://github.com/mayukhbasu/dynamic-module-fed'
+        git branch: 'mf-ci', url: 'https://github.com/mayukhbasu/dynamic-module-fed'
       }
     }
   }
