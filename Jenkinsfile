@@ -2,9 +2,10 @@ pipeline {
   agent any
 
   stages {
-    stage('Hello') {
+    stage('Checkout') {
       steps {
-        echo 'Hello World'
+        // Checkout code from GitHub repository
+        git 'https://github.com/mayukhbasu/dynamic-module-fed'
       }
     }
   }
