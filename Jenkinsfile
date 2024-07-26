@@ -18,5 +18,11 @@ pipeline {
         sh 'npm install'
       }
     }
+    stage('Build Dashboard') {
+      steps {
+        // Build the dashboard application
+        sh 'npm run nx:build:dashboard'
+      }
+    }
   }
 }
