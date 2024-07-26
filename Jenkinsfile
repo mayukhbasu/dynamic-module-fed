@@ -24,5 +24,11 @@ pipeline {
         sh 'npm run nx:build:dashboard'
       }
     }
+    stage('Build Login') {
+      steps {
+        // Build the login application
+        sh 'npm run nx:build:login'
+      }
+    }
   }
 }
