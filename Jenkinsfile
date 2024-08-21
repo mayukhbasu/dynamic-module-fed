@@ -21,7 +21,7 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         // Install npm dependencies
-        sh 'npm install'
+        sh 'npm install; npm i -g nx'
       }
     }
     stage('Build Dashboard') {
