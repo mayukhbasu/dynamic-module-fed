@@ -50,15 +50,16 @@ pipeline {
     stage('Deploy to Nginx') {
             steps {
                 // Use the SSH key for deployment
-                sshagent(['bubul']) {
-                    sh '''
-                      scp dashboard.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/dashboard.tar.gz
-                      scp login.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/login.tar.gz
-                      
-                      ssh ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/dashboard.tar.gz -C ${NGINX_DEPLOY_DIR}"
-                      ssh ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/login.tar.gz -C ${NGINX_DEPLOY_DIR}"
-                    '''
-                }
+                withCredentials([sshUserPrivateKey(credentialsId: 'bubul', keyFileVariable: 'SSH_KEY')]) {
+                  sh '''
+                    scp -i $SSH_KEY dashboard.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/dashboard.tar.gz
+                    scp -i $SSH_KEY login.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/login.tar.gz
+                    
+                    ssh -i $SSH_KEY ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/dashboard.tar.gz -C ${NGINX_DEPLOY_DIR}"
+                    ssh -i $SSH_KEY ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/login.tar.gz -C ${NGINX_DEPLOY_DIR}"
+                  '''
+              }
+
             }
         }
   }
