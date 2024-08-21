@@ -21,19 +21,19 @@ pipeline {
     stage('Install Dependencies') {
       steps {
         // Install npm dependencies
-        sh 'npm install; npm i -g nx; nx reset; ls'
+        sh 'npm install'
       }
     }
     stage('Build Dashboard') {
       steps {
         // Build the dashboard application
-        sh 'npm run nx:build:dashboard'
+        sh 'npm run nx:build:dashboard -- --verbose'
       }
     }
     stage('Build Login') {
       steps {
         // Build the login application
-        sh 'npm run nx:build:login'
+        sh 'npm run nx:build:login -- --verbose'
       }
     }
 
