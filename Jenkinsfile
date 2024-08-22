@@ -50,7 +50,7 @@ pipeline {
     stage('Deploy to Nginx') {
             steps {
                 // Use the SSH key for deployment
-                withCredentials([sshUserPrivateKey(credentialsId: 'bubul', keyFileVariable: 'SSH_KEY')]) {
+                withCredentials([sshUserPrivateKey(credentialsId: 'nginx-deploy-key', keyFileVariable: 'SSH_KEY')]) {
                   sh '''
                     scp -i $SSH_KEY dashboard.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/dashboard.tar.gz
                     scp -i $SSH_KEY login.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/login.tar.gz
