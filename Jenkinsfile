@@ -5,12 +5,6 @@ pipeline {
     nodejs 'NodeJS' // Ensure this matches the name given in Global Tool Configuration
   }
 
-  environment {
-    NGINX_SERVER = 'localhost'
-    NGINX_USER = 'bubul' // Use your local user account for file transfers
-    NGINX_DEPLOY_DIR = '/opt/homebrew/etc/nginx/html'
-  }
-
   parameters {
     choice(
       name: 'BUILD_TARGET',
@@ -26,6 +20,7 @@ pipeline {
         git branch: 'mf-ci', url: 'https://github.com/mayukhbasu/dynamic-module-fed'
       }
     }
+
     stage('Install Dependencies') {
       steps {
         // Install npm dependencies
@@ -33,64 +28,37 @@ pipeline {
       }
     }
 
-    stage('Build Dashboard') {
-      when {
-        expression { params.BUILD_TARGET == 'dashboard' || params.BUILD_TARGET == 'all' }
-      }
-      steps {
-        // Build the dashboard application
-        sh 'npm run nx:build:dashboard -- --verbose'
-      }
-    }
-
-    stage('Build Login') {
-      when {
-        expression { params.BUILD_TARGET == 'login' || params.BUILD_TARGET == 'all' }
-      }
-      steps {
-        // Build the login application
-        sh 'npm run nx:build:login -- --verbose'
-      }
-    }
-
-    stage('Package Applications') {
-      when {
-        expression { params.BUILD_TARGET == 'dashboard' || params.BUILD_TARGET == 'all' || params.BUILD_TARGET == 'login' }
-      }
+    stage('Build Applications') {
       steps {
         script {
           if (params.BUILD_TARGET == 'dashboard' || params.BUILD_TARGET == 'all') {
-            sh 'tar -czvf dashboard.tar.gz dist/apps/dashboard'
+            sh 'npm run nx:build:dashboard -- --verbose'
           }
           if (params.BUILD_TARGET == 'login' || params.BUILD_TARGET == 'all') {
-            sh 'tar -czvf login.tar.gz dist/apps/login'
+            sh 'npm run nx:build:login -- --verbose'
           }
         }
+      }
+    }
+
+    stage('Build Docker Image') {
+      steps {
+        // Build the Docker image with Nginx serving both applications
+        sh 'docker build -t my-nginx-app -f Dockerfile.nginx .'
       }
     }
 
     stage('Deploy to Nginx') {
-      when {
-        expression { params.BUILD_TARGET == 'dashboard' || params.BUILD_TARGET == 'login' || params.BUILD_TARGET == 'all' }
-      }
       steps {
-        withCredentials([sshUserPrivateKey(credentialsId: 'nginx-deploy-key', keyFileVariable: 'SSH_KEY')]) {
-          script {
-            if (params.BUILD_TARGET == 'dashboard' || params.BUILD_TARGET == 'all') {
-              sh '''
-                scp -i $SSH_KEY dashboard.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/dashboard.tar.gz
-                ssh -i $SSH_KEY ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/dashboard.tar.gz -C ${NGINX_DEPLOY_DIR}"
-              '''
-            }
-            if (params.BUILD_TARGET == 'login' || params.BUILD_TARGET == 'all') {
-              sh '''
-                scp -i $SSH_KEY login.tar.gz ${NGINX_USER}@${NGINX_SERVER}:${NGINX_DEPLOY_DIR}/login.tar.gz
-                ssh -i $SSH_KEY ${NGINX_USER}@${NGINX_SERVER} "tar -xzvf ${NGINX_DEPLOY_DIR}/login.tar.gz -C ${NGINX_DEPLOY_DIR}"
-              '''
-            }
-          }
+        script {
+          // Stop and remove the old container if it exists
+          sh 'docker stop my-nginx-app || true && docker rm my-nginx-app || true'
+
+          // Run the new container
+          sh 'docker run -d -p 8080:80 --name my-nginx-app my-nginx-app'
         }
       }
     }
+
   }
 }
