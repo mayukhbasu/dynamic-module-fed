@@ -10,10 +10,10 @@ RUN apt-get update && \
 RUN rm /etc/nginx/sites-enabled/default
 
 # Copy your custom Nginx configuration file to the appropriate location
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
 
 # Copy the default server configuration file to the appropriate location
-COPY default.conf /etc/nginx/sites-available/default
+COPY nginx/default.conf /etc/nginx/sites-available/default
 
 # Enable the site by creating a symlink in sites-enabled
 RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
@@ -22,7 +22,6 @@ RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
 COPY dist/apps/dashboard /var/www/html/dashboard
 
 # Copy the pre-built login application files to the appropriate directory in Nginx
-COPY dist/apps/login /var/www/html/login
 
 # Expose port 80
 EXPOSE 80
