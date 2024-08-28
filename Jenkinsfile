@@ -3,6 +3,7 @@ pipeline {
 
   tools {
     nodejs 'NodeJS' // Ensure this matches the name given in Global Tool Configuration
+    dockerTool 'Docker'
   }
 
   parameters {
