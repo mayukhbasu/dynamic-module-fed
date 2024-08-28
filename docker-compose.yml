@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  nginx:
+    build:
+      context: ./nginx  # Context for the Nginx service
+      dockerfile: Dockerfile.nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - dashboard
+      - login
+    networks:
+      - webnet
+
+  dashboard:
+    build:
+      context: .  # Root context to access dist folder
+      dockerfile: ./apps/dashboard/Dockerfile
+    container_name: dashboard
+    networks:
+      - webnet
+
+  login:
+    build:
+      context: .  # Root context to access dist folder
+      dockerfile: ./apps/login/Dockerfile
+    container_name: login
+    networks:
+      - webnet
+
+networks:
+  webnet:
