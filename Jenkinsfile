@@ -44,7 +44,7 @@ pipeline {
     stage('Build Docker Image') {
       steps {
         // Build the Docker image with Nginx serving both applications
-        sh 'docker build -t my-nginx-app -f Dockerfile.nginx .'
+        sh 'docker build -t my-nginx-app -f nginx/Dockerfile.nginx .'
       }
     }
 
