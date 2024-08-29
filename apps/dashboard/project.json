@@ -12,7 +12,7 @@
       "options": {
         "outputPath": "dist/apps/dashboard",
         "index": "apps/dashboard/src/index.html",
-        "main": "apps/dashboard/src/main.ts",
+        "main": "apps/dashboard/src/main.ts", 
         "polyfills": ["zone.js"],
         "tsConfig": "apps/dashboard/tsconfig.app.json",
         "assets": [
@@ -28,6 +28,7 @@
       },
       "configurations": {
         "production": {
+          "main": "apps/dashboard/src/main.prod.ts", 
           "budgets": [
             {
               "type": "initial",

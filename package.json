@@ -2,11 +2,13 @@
   "name": "@ng-mf/source",
   "version": "0.0.0",
   "license": "MIT",
-  
   "scripts": {
     "nx:build": "nx build",
     "nx:build:dashboard": "nx build dashboard",
-    "nx:build:login": "nx build login"
+    "nx:build:login": "nx build login",
+    "nx:serve:dashboard:dev": "nx serve dashboard --configuration=development",
+    "nx:serve:dashboard:prod": "nx serve dashboard --configuration=production",
+    "nx:serve:login": "nx serve login"
   },
   "private": true,
   "dependencies": {
