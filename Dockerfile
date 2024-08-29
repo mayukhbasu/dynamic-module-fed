@@ -15,6 +15,8 @@ COPY dist/apps/dashboard /var/www/html/dashboard
 COPY dist/apps/login /var/www/html/login
 
 # Copy custom Nginx configuration
+
+
 COPY nginx/nginx.conf /etc/nginx/nginx.conf
 COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
