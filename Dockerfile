@@ -10,7 +10,7 @@ RUN useradd -r -s /bin/false messageUser
 # Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
 
-# Set the ownership of the web root directory to the new user
+# Set the ownership of the web root directory to the new user1
 RUN chown -R messageUser:messageUser /var/www/html
 
 # Copy built files for the dashboard and login applications
