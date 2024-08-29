@@ -1,28 +1,22 @@
-# Use an official Ubuntu 22.04 image
+# Use an official Ubuntu 22.04 base image
 FROM ubuntu:22.04
 
 # Install Nginx
-RUN apt-get update && \
-    apt-get install -y nginx && \
-    rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y nginx && apt-get clean
 
-# Remove the default configuration file (optional, but ensures no conflicts)
+# Add a non-root user for Nginx
+RUN useradd -r -s /bin/false nginx
+
+# Remove the default Nginx configuration file
 RUN rm /etc/nginx/sites-enabled/default
 
-# Copy your custom Nginx configuration file to the appropriate location
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Copy the default server configuration file to the appropriate location
-COPY default.conf /etc/nginx/sites-available/default
-
-# Enable the site by creating a symlink in sites-enabled
-RUN ln -s /etc/nginx/sites-available/default /etc/nginx/sites-enabled/
-
-# Copy the pre-built dashboard application files to the appropriate directory in Nginx
+# Copy built files for the dashboard and login applications
 COPY dist/apps/dashboard /var/www/html/dashboard
-
-# Copy the pre-built login application files to the appropriate directory in Nginx
 COPY dist/apps/login /var/www/html/login
+
+# Copy custom Nginx configuration
+COPY nginx/nginx.conf /etc/nginx/nginx.conf
+COPY nginx/default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80
