@@ -21,6 +21,7 @@
         ],
         "styles": ["apps/dashboard/src/styles.css"],
         "scripts": [],
+        "deployUrl": "/dashboard/",
         "customWebpackConfig": {
           "path": "apps/dashboard/webpack.config.ts"
         }

@@ -23,6 +23,7 @@
         ],
         "styles": ["apps/login/src/styles.css"],
         "scripts": [],
+        "deployUrl": "/login/",
         "customWebpackConfig": {
           "path": "apps/login/webpack.config.ts"
         }
