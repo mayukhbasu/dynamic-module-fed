@@ -7,7 +7,7 @@ RUN apt-get update && apt-get install -y nginx && apt-get clean
 # Add a non-root user for Nginx
 RUN useradd -r -s /bin/false nginx
 
-# Remove the default Nginx configuration file
+# Remove the default Nginx configuration file final
 RUN rm /etc/nginx/sites-enabled/default
 
 # Copy built files for the dashboard and login applications
