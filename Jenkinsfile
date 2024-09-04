@@ -5,6 +5,9 @@ pipeline {
     nodejs 'NodeJS' // Ensure this matches the name given in Global Tool Configuration
     dockerTool 'Docker'
   }
+  environment {
+    DOCKER_BUILDKIT = "1"
+  }
 
   parameters {
     choice(
