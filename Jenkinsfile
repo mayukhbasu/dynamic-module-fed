@@ -1,10 +1,5 @@
 pipeline {
-  agent {
-    docker {
-      image 'docker:20.10.7' // Use a Docker image with Docker installed
-      args '-v /var/run/docker.sock:/var/run/docker.sock' // Mount Docker socket
-    }
-  }
+  agent any
 
   tools {
     nodejs 'NodeJS' // Ensure this matches the name given in Global Tool Configuration
