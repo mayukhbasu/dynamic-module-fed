@@ -42,12 +42,19 @@ pipeline {
       }
     }
 
-    stage('Build Docker Image') {
+   stage('Build Docker Image for Dashboard') {
       steps {
-        // Build the Docker image with Nginx serving both applications
-        sh 'docker build -t my-nginx-app -f nginx/Dockerfile.nginx .'
+          // Build the Docker image for the dashboard application
+          sh 'docker build -t dashboard-app -f apps/dashboard/Dockerfile.dashboard .'
       }
     }
+
+    stage('Build Docker Image for Login') {
+        steps {
+            // Build the Docker image for the login application
+            sh 'docker build -t login-app -f apps/login/Dockerfile.login .'
+        }
+      }
 
     stage('Deploy to Nginx') {
       steps {
