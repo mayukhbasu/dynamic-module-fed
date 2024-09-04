@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: login
-        image: 253490776807.dkr.ecr.us-east-1.amazonaws.com/login-image:v3
+        image: 253490776807.dkr.ecr.us-east-1.amazonaws.com/login-image:v9
         ports:
         - containerPort: 80
 ---
